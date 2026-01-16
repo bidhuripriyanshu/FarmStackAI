@@ -15,44 +15,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies();
   const { t } = useTranslation();
-  // const [selectedLanguage, setSelectedLanguage] = useState(lang);
-
-  // const languages = [
-  //   { code: 'deff', name: 'Default' },
-  //   { code: 'en', name: 'English' },
-  //   { code: 'bn', name: 'Bengali' },
-  //   { code: 'gu', name: 'Gujarati' },
-  //   { code: 'hi', name: 'Hindi' },
-  //   { code: 'kn', name: 'Kannada' },
-  //   { code: 'ml', name: 'Malayalam' },
-  //   { code: 'mr', name: 'Marathi' },
-  //   { code: 'or', name: 'Oriya' },
-  //   { code: 'pa', name: 'Punjabi' },
-  //   { code: 'ta', name: 'Tamil' },
-  //   { code: 'te', name: 'Telugu' },
-  //   { code: 'ur', name: 'Urdu' },
-  // ];
-
-  // const handleLanguageChange = async (event) => {
-  //   const newLanguage = event.target.value;
-  //   if (window.confirm(`Are you sure you want to change the language to ${newLanguage}?`)) {
-  //     try {
-  //       // Call your update language API // Assuming you have user ID stored in cookies
-  //       const response = await axios.post(`${url}/updateLanguage`, { userId: userId, language: newLanguage });
-        
-  //       if (response.data.success) {
-  //         setSelectedLanguage(newLanguage);
-  //         Cookies.set('language', newLanguage);
-  //         window.location.reload();
-  //       } else {
-  //         alert("Failed to update language. Please try again.:",response.message);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error updating language:', error.response ? error.response.data : error.message);
-  //       alert("An error occurred. Please try again.");
-  //     }
-  //   }
-  // };
+  
 
   const Logout = () => {
     // setSelectedLanguage("");
@@ -89,7 +52,7 @@ const Navbar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a className="navbar-brand" href="/Landing">
+            <a className="navbar-brand" href="/landing">
             {t('Title')}
             </a>
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -109,7 +72,7 @@ const Navbar = () => {
                 </a>
               </li>
                <li className="nav-item">
-                <a className="nav-link" href="/posts">
+                <a className="nav-link" href="">
                 {t('Posts')}
                 </a>
               </li>

@@ -5,7 +5,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import url from '../url';
 
-
 const Signup = () => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
@@ -13,106 +12,583 @@ const Signup = () => {
     name: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
   const { email, password, name } = inputValue;
+
+  // Image paths with proper encoding
+  const bgImage1 = encodeURI('/Screenshot 2026-01-16 193819.png');
+  const bgImage2 = encodeURI('/Screenshot 2026-01-16 193838.png');
+  const bgImage3 = encodeURI('/Screenshot 2026-01-16 193814.png');
+  
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
       ...inputValue,
       [name]: value,
     });
+
+    // Calculate password strength
+    if (name === 'password') {
+      let strength = 0;
+      if (value.length >= 6) strength++;
+      if (value.length >= 8) strength++;
+      if (/[A-Z]/.test(value)) strength++;
+      if (/[0-9]/.test(value)) strength++;
+      if (/[^A-Za-z0-9]/.test(value)) strength++;
+      setPasswordStrength(strength);
+    }
+  };
+
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength <= 1) return '#ef4444';
+    if (passwordStrength <= 3) return '#f59e0b';
+    return '#10b981';
   };
 
   const handleError = (err) =>
-      toast.error(err, {
-        position: "bottom-left",
-      });
+    toast.error(err, {
+      position: "top-right",
+      autoClose: 3000,
+    });
   
   const handleSuccess = (msg) =>
-      toast.success(msg, {
-        position: "top",
-      });
+    toast.success(msg, {
+      position: "top",
+    });
   
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        const { data } = await axios.post(
-          `${url}/signup`,
-          {
-            ...inputValue,
-          },
-          { withCredentials: true }
-        );
-        const { success, message,token } = data;
-        if(token){
-          Cookies.set('token', token);
-          }
-        if (success) {
-          handleSuccess(message);
-          setTimeout(() => {
-            navigate("/Landing");
-          }, 1000);
-        } else {
-          handleError(message);
-        }
-      } catch (error) {
-        // console.log(error);
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post(
+        `${url}/signup`,
+        {
+          ...inputValue,
+        },
+        { withCredentials: true }
+      );
+      const { success, message, token } = data;
+      if (token) {
+        Cookies.set('token', token);
       }
-      setInputValue({
-        ...inputValue,
-        email: "",
-        password: "",
-        name: "",
-      });
-    };
-  
+      if (success) {
+        handleSuccess(message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      } else {
+        handleError(message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Signup failed. Please try again.';
+      handleError(errorMessage);
+      setIsLoading(false);
+    }
+    setInputValue({
+      ...inputValue,
+      email: "",
+      password: "",
+      name: "",
+    });
+    setPasswordStrength(0);
+  };
 
   return (
-    
-    <div className="signup_container" style={{ backgroundImage: `url("LOGIN.png")`, backgroundSize: "cover" }}>
-    <div className="form_container" >
-      <h1 style={{marginTop:-250, fontFamily: "cursive", 
-fontStyle: "italic bold ", fontSize:"60px"}} >Crop Mate</h1>
-          <h2 style={{}}>Signup Account</h2>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="email">Email</label>
+    <div style={{
+      minHeight: "100vh",
+      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "20px",
+      position: "relative",
+      overflow: "hidden"
+    }}>
+      {/* Animated Background Images with Parallax */}
+      <div style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        top: 0,
+        left: 0,
+        zIndex: 0,
+        pointerEvents: "none",
+        overflow: "hidden"
+      }}>
+        {/* Background Image Layer 1 - Main */}
+        <div 
+          className="bg-image-layer-1"
+          style={{
+            position: "absolute",
+            width: "120%",
+            height: "120%",
+            top: "-10%",
+            left: "-10%",
+            backgroundImage: `url('${bgImage1}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: 0.3,
+            animation: "parallaxSlow 20s ease-in-out infinite",
+            filter: "blur(2px) brightness(0.4)"
+          }}
+        ></div>
+        
+        {/* Background Image Layer 2 - Secondary */}
+        <div 
+          className="bg-image-layer-2"
+          style={{
+            position: "absolute",
+            width: "110%",
+            height: "110%",
+            top: "-5%",
+            right: "-5%",
+            backgroundImage: `url('${bgImage2}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: 0.25,
+            animation: "parallaxMedium 25s ease-in-out infinite",
+            filter: "blur(3px) brightness(0.3)"
+          }}
+        ></div>
+
+        {/* Background Image Layer 3 - Overlay */}
+        <div 
+          className="bg-image-layer-3"
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+            backgroundImage: `url('${bgImage3}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: 0.2,
+            animation: "parallaxFast 15s ease-in-out infinite",
+            filter: "blur(1px) brightness(0.35)"
+          }}
+        ></div>
+
+        {/* Gradient Overlay for better text readability */}
+        <div style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+          background: "linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%)",
+          zIndex: 1
+        }}></div>
+
+        {/* Floating Particles */}
+        <div style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+          zIndex: 2
+        }}>
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              style={{
+                position: "absolute",
+                width: `${20 + i * 10}px`,
+                height: `${20 + i * 10}px`,
+                borderRadius: "50%",
+                background: "rgba(255, 255, 255, 0.1)",
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                animation: `float ${6 + i * 2}s ease-in-out infinite ${i * 0.5}s`,
+                boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)"
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { 
+            transform: translateY(0px) translateX(0px) rotate(0deg); 
+            opacity: 0.3;
+          }
+          25% { 
+            transform: translateY(-30px) translateX(20px) rotate(90deg); 
+            opacity: 0.5;
+          }
+          50% { 
+            transform: translateY(-60px) translateX(-20px) rotate(180deg); 
+            opacity: 0.4;
+          }
+          75% { 
+            transform: translateY(-30px) translateX(10px) rotate(270deg); 
+            opacity: 0.5;
+          }
+        }
+        @keyframes parallaxSlow {
+          0%, 100% { 
+            transform: translate(0, 0) scale(1);
+          }
+          50% { 
+            transform: translate(-20px, -20px) scale(1.05);
+          }
+        }
+        @keyframes parallaxMedium {
+          0%, 100% { 
+            transform: translate(0, 0) scale(1);
+          }
+          50% { 
+            transform: translate(30px, 30px) scale(1.08);
+          }
+        }
+        @keyframes parallaxFast {
+          0%, 100% { 
+            transform: translate(0, 0) scale(1);
+          }
+          50% { 
+            transform: translate(-15px, 15px) scale(1.03);
+          }
+        }
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .signup-form-container {
+          animation: slideIn 0.6s ease-out;
+        }
+        @media (max-width: 768px) {
+          .bg-image-layer-1,
+          .bg-image-layer-2,
+          .bg-image-layer-3 {
+            filter: blur(3px) brightness(0.2) !important;
+          }
+        }
+      `}</style>
+
+      <div className="signup-form-container" style={{
+        width: "100%",
+        maxWidth: "480px",
+        background: "rgba(255, 255, 255, 0.98)",
+        backdropFilter: "blur(20px)",
+        borderRadius: "32px",
+        padding: "3rem 2.5rem",
+        boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+        position: "relative",
+        zIndex: 1
+      }}>
+        {/* Logo/Brand Section */}
+        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <div style={{
+            width: "80px",
+            height: "80px",
+            margin: "0 auto 1.5rem",
+            background: "linear-gradient(135deg, #667eea, #764ba2)",
+            borderRadius: "20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 10px 30px rgba(102, 126, 234, 0.4)"
+          }}>
+            <span style={{ fontSize: "2.5rem" }}>🌱</span>
+          </div>
+          <h1 style={{
+            fontSize: "clamp(2rem, 5vw, 2.5rem)",
+            fontWeight: "700",
+            margin: "0 0 0.5rem 0",
+            background: "linear-gradient(135deg, #667eea, #764ba2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text"
+          }}>
+            FramStack
+          </h1>
+          <p style={{
+            color: "#6b7280",
+            fontSize: "1rem",
+            margin: 0,
+            fontWeight: "400"
+          }}>
+            Create your account and start your farming journey
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          {/* Name Input */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <label style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              color: "#374151",
+              fontSize: "0.875rem",
+              fontWeight: "600"
+            }}>
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={handleOnChange}
+              required
+              placeholder="Enter your full name"
+              style={{
+                width: "100%",
+                padding: "0.875rem 1rem",
+                fontSize: "1rem",
+                border: "2px solid #e5e7eb",
+                borderRadius: "12px",
+                outline: "none",
+                transition: "all 0.3s ease",
+                boxSizing: "border-box"
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = "#667eea";
+                e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "#e5e7eb";
+                e.target.style.boxShadow = "none";
+              }}
+            />
+          </div>
+
+          {/* Email Input */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <label style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              color: "#374151",
+              fontSize: "0.875rem",
+              fontWeight: "600"
+            }}>
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={handleOnChange}
+              required
+              placeholder="Enter your email"
+              style={{
+                width: "100%",
+                padding: "0.875rem 1rem",
+                fontSize: "1rem",
+                border: "2px solid #e5e7eb",
+                borderRadius: "12px",
+                outline: "none",
+                transition: "all 0.3s ease",
+                boxSizing: "border-box"
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = "#667eea";
+                e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "#e5e7eb";
+                e.target.style.boxShadow = "none";
+              }}
+            />
+          </div>
+
+          {/* Password Input */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <label style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              color: "#374151",
+              fontSize: "0.875rem",
+              fontWeight: "600"
+            }}>
+              Password
+            </label>
+            <div style={{ position: "relative" }}>
               <input
-                type="email"
-                name="email"
-                value={email}
-                placeholder="Enter your email"
-                onChange={handleOnChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={name}
-                placeholder="Enter your Name"
-                onChange={handleOnChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={password}
-                placeholder="Enter your password"
                 onChange={handleOnChange}
+                required
+                placeholder="Create a strong password"
+                style={{
+                  width: "100%",
+                  padding: "0.875rem 1rem 0.875rem 1rem",
+                  fontSize: "1rem",
+                  border: "2px solid #e5e7eb",
+                  borderRadius: "12px",
+                  outline: "none",
+                  transition: "all 0.3s ease",
+                  boxSizing: "border-box"
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = "#667eea";
+                  e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = "#e5e7eb";
+                  e.target.style.boxShadow = "none";
+                }}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#6b7280",
+                  fontSize: "1.2rem",
+                  padding: "0.5rem"
+                }}
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
             </div>
-            <button type="submit">Submit</button>
-            <span>
-              Already have an account? <Link to={"/login"}>Login</Link>
-            </span>
-          </form>
-      <Toaster />
-        </div>
-        </div>
-  )
-}
+            {/* Password Strength Indicator */}
+            {password && (
+              <div style={{ marginTop: "0.5rem" }}>
+                <div style={{
+                  display: "flex",
+                  gap: "4px",
+                  marginBottom: "0.25rem"
+                }}>
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <div
+                      key={level}
+                      style={{
+                        flex: 1,
+                        height: "4px",
+                        borderRadius: "2px",
+                        background: level <= passwordStrength 
+                          ? getPasswordStrengthColor() 
+                          : "#e5e7eb",
+                        transition: "background 0.3s ease"
+                      }}
+                    />
+                  ))}
+                </div>
+                <p style={{
+                  fontSize: "0.75rem",
+                  color: passwordStrength <= 1 ? "#ef4444" : passwordStrength <= 3 ? "#f59e0b" : "#10b981",
+                  margin: 0,
+                  fontWeight: "500"
+                }}>
+                  {passwordStrength <= 1 ? "Weak" : passwordStrength <= 3 ? "Medium" : "Strong"} password
+                </p>
+              </div>
+            )}
+          </div>
 
-export default Signup
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            style={{
+              width: "100%",
+              padding: "0.875rem",
+              fontSize: "1rem",
+              fontWeight: "600",
+              background: isLoading 
+                ? "#9ca3af" 
+                : "linear-gradient(135deg, #667eea, #764ba2)",
+              border: "none",
+              borderRadius: "12px",
+              color: "white",
+              cursor: isLoading ? "not-allowed" : "pointer",
+              transition: "all 0.3s ease",
+              boxShadow: isLoading 
+                ? "none" 
+                : "0 4px 15px rgba(102, 126, 234, 0.4)",
+              marginBottom: "1.5rem"
+            }}
+            onMouseOver={(e) => {
+              if (!isLoading) {
+                e.target.style.transform = "translateY(-2px)";
+                e.target.style.boxShadow = "0 6px 20px rgba(102, 126, 234, 0.5)";
+              }
+            }}
+            onMouseOut={(e) => {
+              if (!isLoading) {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.4)";
+              }
+            }}
+          >
+            {isLoading ? (
+              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+                <span style={{
+                  width: "16px",
+                  height: "16px",
+                  border: "2px solid rgba(255,255,255,0.3)",
+                  borderTop: "2px solid white",
+                  borderRadius: "50%",
+                  animation: "spin 0.8s linear infinite",
+                  display: "inline-block"
+                }}></span>
+                Creating account...
+              </span>
+            ) : (
+              "Create Account"
+            )}
+          </button>
+
+          <style>{`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
+
+          {/* Login Link */}
+          <div style={{
+            textAlign: "center",
+            paddingTop: "1.5rem",
+            borderTop: "1px solid #e5e7eb"
+          }}>
+            <p style={{
+              color: "#6b7280",
+              fontSize: "0.875rem",
+              margin: "0 0 0.5rem 0"
+            }}>
+              Already have an account?
+            </p>
+            <Link
+              to="/login"
+              style={{
+                color: "#667eea",
+                fontWeight: "600",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                transition: "color 0.3s ease"
+              }}
+              onMouseOver={(e) => e.target.style.color = "#764ba2"}
+              onMouseOut={(e) => e.target.style.color = "#667eea"}
+            >
+              Sign in instead →
+            </Link>
+          </div>
+        </form>
+
+        <Toaster />
+      </div>
+    </div>
+  );
+};
+
+export default Signup;

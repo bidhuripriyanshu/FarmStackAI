@@ -15,6 +15,14 @@ const Ideal = ({ cropName, soilConditions }) => {
 
 
   const getSoilAdjustmentSuggestion = async () => {
+    // Check if API key is available
+    if (!api || api.trim() === '') {
+      setError("API key is not configured. Please set VITE_API_KEY in your .env file.");
+      setLoading(false);
+      setButtonVisible(true);
+      return;
+    }
+
     const instruction = (languageName === "Default" || languageName === "English") ? '' : ` Give instructions in stict ${languageName} Language with no other words than the ${languageName} words.`;
     const url = "https://chatgpt-42.p.rapidapi.com/chatgpt";
     const headers = {
@@ -38,13 +46,37 @@ const Ideal = ({ cropName, soilConditions }) => {
     };
 
     try {
-      console.log(payload.messages)
       const response = await axios.post(url, payload, { headers });
-      setAdjustmentSuggestion(response.data.result); // Adjust this line according to your response structure
-      console.log("Response:", response.data);
+      
+      if (response.data && response.data.result) {
+        setAdjustmentSuggestion(response.data.result);
+      } else {
+        setError("Received unexpected response format from API.");
+      }
     } catch (error) {
-      console.error("Error:", error.message);
-      setError("Failed to fetch soil adjustment suggestion.");
+      console.error("Error:", error);
+      
+      // Provide specific error messages based on error type
+      if (error.response) {
+        // Server responded with error status
+        if (error.response.status === 401) {
+          setError("API key is invalid or expired. Please check your VITE_API_KEY in .env file.");
+        } else if (error.response.status === 403) {
+          setError("API access forbidden. Please check your API key permissions.");
+        } else if (error.response.status === 429) {
+          setError("API rate limit exceeded. Please try again later.");
+        } else {
+          setError(`API error: ${error.response.status} - ${error.response.statusText}`);
+        }
+      } else if (error.request) {
+        // Request was made but no response received
+        setError("Unable to connect to API. Please check your internet connection.");
+      } else {
+        // Something else happened
+        setError("Failed to fetch soil adjustment suggestion. Please try again.");
+      }
+      
+      setButtonVisible(true); // Show button again on error
     } finally {
       setLoading(false);
     }
@@ -98,8 +130,23 @@ const Ideal = ({ cropName, soilConditions }) => {
           <span style={{ marginLeft: '2px', color:'black' }}>{t("Sugg")}</span>
         </button>
       )}
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {loading && (
+        <div style={{ padding: '10px', textAlign: 'center' }}>
+          <p>Loading AI suggestions...</p>
+        </div>
+      )}
+      {error && (
+        <div style={{ 
+          padding: '15px', 
+          margin: '10px 0',
+          backgroundColor: '#fee',
+          border: '1px solid #fcc',
+          borderRadius: '8px',
+          color: '#c33'
+        }}>
+          <strong>Error:</strong> {error}
+        </div>
+      )}
       {adjustmentSuggestion && formatSuggestion(adjustmentSuggestion)}
     </div>
   );

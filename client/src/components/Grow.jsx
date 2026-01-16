@@ -14,6 +14,14 @@ const Grow = ({ cropName }) => {
   const { t } = useTranslation();
 
   const getGrowingSuggestion = async (cropName) => {
+    // Check if API key is available
+    if (!api || api.trim() === '') {
+      setError("API key is not configured. Please set VITE_API_KEY in your .env file.");
+      setLoading(false);
+      setButtonVisible(true);
+      return;
+    }
+
     const instruction = (languageName === "Default" || languageName === "English") ? '' : ` Give instructions in ${languageName} Language with no other words than the ${languageName} words.`;
     const url = "https://chatgpt-42.p.rapidapi.com/chatgpt";
     const headers = {
@@ -27,14 +35,34 @@ const Grow = ({ cropName }) => {
     };
 
     try {
-      console.log(payload)
       const response = await axios.post(url, payload, { headers });
-      const suggestion = response.data.result;
-      setGrowingSuggestion(suggestion);
-      console.log(suggestion);
+      
+      if (response.data && response.data.result) {
+        setGrowingSuggestion(response.data.result);
+      } else {
+        setError("Received unexpected response format from API.");
+      }
     } catch (error) {
-      console.error("Error:", error.message);
-      setError("Failed to fetch growing suggestion.");
+      console.error("Error:", error);
+      
+      // Provide specific error messages based on error type
+      if (error.response) {
+        if (error.response.status === 401) {
+          setError("API key is invalid or expired. Please check your VITE_API_KEY in .env file.");
+        } else if (error.response.status === 403) {
+          setError("API access forbidden. Please check your API key permissions.");
+        } else if (error.response.status === 429) {
+          setError("API rate limit exceeded. Please try again later.");
+        } else {
+          setError(`API error: ${error.response.status} - ${error.response.statusText}`);
+        }
+      } else if (error.request) {
+        setError("Unable to connect to API. Please check your internet connection.");
+      } else {
+        setError("Failed to fetch growing suggestion. Please try again.");
+      }
+      
+      setButtonVisible(true); // Show button again on error
     } finally {
       setLoading(false);
     }
@@ -84,8 +112,23 @@ const Grow = ({ cropName }) => {
           <span style={{ marginLeft: '2px' ,color:'black'}}>{t("Sugg")}</span>
         </button>
       )}
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {loading && (
+        <div style={{ padding: '10px', textAlign: 'center' }}>
+          <p>Loading AI suggestions...</p>
+        </div>
+      )}
+      {error && (
+        <div style={{ 
+          padding: '15px', 
+          margin: '10px 0',
+          backgroundColor: '#fee',
+          border: '1px solid #fcc',
+          borderRadius: '8px',
+          color: '#c33'
+        }}>
+          <strong>Error:</strong> {error}
+        </div>
+      )}
       {growingSuggestion && formatSuggestion(growingSuggestion)}
     </div>
   );
