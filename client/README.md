@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CropSathi Client
 
 Frontend client application for CropSathi - An AI-powered crop recommendation and farming community platform.
@@ -89,3 +90,6 @@ Required environment variables (see `.env.example`):
 - i18next (Internationalization)
 - Bootstrap
 - React Hot Toast
+=======
+ for Fast Refresh
+>>>>>>> aa09be6f35292c0cba13955dcec76b479bac5359
