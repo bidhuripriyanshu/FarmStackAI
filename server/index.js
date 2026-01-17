@@ -8,6 +8,7 @@ const postRoute = require("./Routes/PostRoute"); //postRoute is a route that han
 const commentRoute = require("./Routes/CommentRoute"); //commentRoute is a route that handles comments
 const { PORT } = process.env; //PORT is the port number that the server will listen on
 
+const connectDB = require("./config/db"); // adjust path if needed
 
 const app = express(); //create an express application
 // ✅ CORS — MUST BE FIRST
