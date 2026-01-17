@@ -1,3 +1,4 @@
+const express = require("express"); // ✅ MUST be first
 const cors = require("cors"); //cors is a middleware that allows cross-origin requests
 require("dotenv").config(); //dotenv is a module that loads environment variables from a .env file into process.env
 const cookieParser = require("cookie-parser"); //cookieParser is a middleware that parses cookies
@@ -11,7 +12,7 @@ const { PORT } = process.env; //PORT is the port number that the server will lis
 const connectDB = require("./config/db"); // adjust path if needed
 
 const app = express(); //create an express application
-const express = require("express");
+
 
 // ✅ CORS — MUST BE FIRST
 app.use(
