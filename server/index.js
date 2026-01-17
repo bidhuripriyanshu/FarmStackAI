@@ -11,6 +11,8 @@ const { PORT } = process.env; //PORT is the port number that the server will lis
 const connectDB = require("./config/db"); // adjust path if needed
 
 const app = express(); //create an express application
+const express = require("express");
+
 // ✅ CORS — MUST BE FIRST
 app.use(
   cors({
