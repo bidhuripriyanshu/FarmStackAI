@@ -1,19 +1,15 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
-const cookieParser = require("cookie-parser");
+const cors = require("cors"); //cors is a middleware that allows cross-origin requests
+require("dotenv").config(); //dotenv is a module that loads environment variables from a .env file into process.env
+const cookieParser = require("cookie-parser"); //cookieParser is a middleware that parses cookies
+const authRoute = require("./Routes/AuthRoute"); //authRoute is a route that handles authentication
+const dataRoute = require("./Routes/DataRoute"); //dataRoute is a route that handles data
+const cropRoute = require("./Routes/CropRoute"); //cropRoute is a route that handles crops
+const postRoute = require("./Routes/PostRoute"); //postRoute is a route that handles posts
+const commentRoute = require("./Routes/CommentRoute"); //commentRoute is a route that handles comments
+const { PORT } = process.env; //PORT is the port number that the server will listen on
 
-const authRoute = require("./Routes/AuthRoute");
-const dataRoute = require("./Routes/DataRoute");
-const cropRoute = require("./Routes/CropRoute");
-const postRoute = require("./Routes/PostRoute");
-const commentRoute = require("./Routes/CommentRoute");
 
-const connectDB = require("./config/db"); // adjust path if needed
-const { PORT } = process.env;
-
-const app = express();
-
+const app = express(); //create an express application
 // ✅ CORS — MUST BE FIRST
 app.use(
   cors({
@@ -30,9 +26,10 @@ app.use(
 // ✅ REQUIRED for Vercel
 app.options("*", cors());
 
-// Other middleware
+
 app.use(cookieParser());
-app.use(express.json());
+app.use(express.json());  
+//express.json(): The express.json() will add a body property to the request or req object. This includes the request body's parsed JSON data. req.body in your route handler function will allow you to access this data
 
 // Routes
 app.use("/", authRoute);
@@ -41,19 +38,21 @@ app.use("/", cropRoute);
 app.use("/", postRoute);
 app.use("/", commentRoute);
 
+// Adding by priyanshu
 app.get("/", (req, res) => {
   res.send("Hello World Priyanshu Bidhuri");
 });
 
-// DB
-connectDB();
+// Connect to database and start server
+connectDB(); //connect to the database
 
-// Local only
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+// Start server only after database connection is established
+if (!PORT) {
+  console.error("PORT is not defined in environment variables. Please check your .env file.");
+  process.exit(1);
 }
 
-// ✅ IMPORTANT for Vercel
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+  console.log(`Server URL: http://localhost:${PORT}`);
+}); 
