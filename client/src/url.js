@@ -1,12 +1,3 @@
-let url;
-
-if (window.location.hostname === "localhost") {
-  url = "http://localhost:4999";
-} else if (window.location.hostname === "farm-stack-ai.vercel.app") {
-  url = "https://farm-stack-ai-868q.vercel.app";
-} else {
-  url = "https://farm-stack-ai-868q.vercel.app"; // safer default
-}
-
+const url = import.meta.env.VITE_API_URL;
 export default url;
 
