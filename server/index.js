@@ -36,7 +36,7 @@ app.use("/", commentRoute);
 
 // Adding by priyanshu
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Hello World Priyanshu Bidhuri");
 });
 
 // Connect to database and start server
