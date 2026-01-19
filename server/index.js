@@ -1,4 +1,5 @@
-const express = require("express"); // ✅ MUST be first
+const { connectDB } = require("./config/db"); //connectDB is a function that connects to the database
+const express = require("express"); //express is a framework for building web applications
 const cors = require("cors"); //cors is a middleware that allows cross-origin requests
 require("dotenv").config(); //dotenv is a module that loads environment variables from a .env file into process.env
 const cookieParser = require("cookie-parser"); //cookieParser is a middleware that parses cookies
@@ -9,27 +10,13 @@ const postRoute = require("./Routes/PostRoute"); //postRoute is a route that han
 const commentRoute = require("./Routes/CommentRoute"); //commentRoute is a route that handles comments
 const { PORT } = process.env; //PORT is the port number that the server will listen on
 
-const connectDB = require("./config/db"); // adjust path if needed
 
 const app = express(); //create an express application
 
-
-// ✅ CORS — MUST BE FIRST
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://farm-stack-ai.vercel.app"
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  })
-);
-
-// ✅ REQUIRED for Vercel
+// ✅ CORS — MUST BE FIRST 
+app.use( cors({ origin: [ "http://localhost:5173", "https://farm-stack-ai.vercel.app" ], credentials: true, methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], allowedHeaders: ["Content-Type", "Authorization"] }) ); 
+// ✅ REQUIRED for Vercel 
 app.options("*", cors());
-
 
 app.use(cookieParser());
 app.use(express.json());  
@@ -44,7 +31,7 @@ app.use("/", commentRoute);
 
 // Adding by priyanshu
 app.get("/", (req, res) => {
-  res.send("Hello World Priyanshu Bidhuri");
+  res.send("Hello World");
 });
 
 // Connect to database and start server
@@ -60,5 +47,3 @@ app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
   console.log(`Server URL: http://localhost:${PORT}`);
 }); 
-/* EXPORT APP (IMPORTANT) */
-module.exports = app;
