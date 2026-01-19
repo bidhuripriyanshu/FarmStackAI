@@ -13,33 +13,24 @@ const { PORT } = process.env; //PORT is the port number that the server will lis
 
 const app = express(); //create an express application
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      const allowedOrigins = [
-        "https://farm-stack-ai.vercel.app"
-      ];
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  })
-);
-
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "https://farm-stack-ai.vercel.app"
+  ];
+
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.header(
+  res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
   );
@@ -50,6 +41,9 @@ app.use((req, res, next) => {
 
   next();
 });
+
+
+
 
 app.use(cookieParser());
 app.use(express.json());  
