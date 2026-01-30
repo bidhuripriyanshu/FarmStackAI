@@ -13,15 +13,37 @@ const { PORT } = process.env; //PORT is the port number that the server will lis
 
 const app = express(); //create an express application
 
-// Middleware must be set up BEFORE routes and BEFORE server starts listening
-app.use(
-  cors({
-    //CORS (Cross origin resource sharing): You can allow requests from other domains to access the resources on your server by using the cors() express middleware function. 
-    origin: ["http://localhost:4000","http://localhost:4999","http://localhost:5173"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "https://farm-stack-ai.vercel.app"
+  ];
+
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+
+
 
 app.use(cookieParser());
 app.use(express.json());  
