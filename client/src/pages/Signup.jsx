@@ -12,26 +12,20 @@ const Signup = () => {
     name: "",
     password: "",
   });
+  
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
 
   const { email, password, name } = inputValue;
 
-  // Image paths with proper encoding
-  const bgImage1 = encodeURI('/Screenshot 2026-01-16 193819.png');
-  const bgImage2 = encodeURI('/Screenshot 2026-01-16 193838.png');
-  const bgImage3 = encodeURI('/Screenshot 2026-01-16 193814.png');
-  
   const handleOnChange = (e) => {
-    const { name, value } = e.target;
+    const { name: field, value } = e.target;
     setInputValue({
       ...inputValue,
-      [name]: value,
+      [field]: value,
     });
-
-    // Calculate password strength
-    if (name === 'password') {
+    if (field === 'password') {
       let strength = 0;
       if (value.length >= 6) strength++;
       if (value.length >= 8) strength++;
@@ -43,9 +37,9 @@ const Signup = () => {
   };
 
   const getPasswordStrengthColor = () => {
-    if (passwordStrength <= 1) return '#ef4444';
-    if (passwordStrength <= 3) return '#f59e0b';
-    return '#10b981';
+    if (passwordStrength <= 1) return 'hsl(0 84% 60%)';
+    if (passwordStrength <= 3) return 'hsl(38 92% 50%)';
+    return 'hsl(160 84% 39%)';
   };
 
   const handleError = (err) =>
@@ -53,12 +47,12 @@ const Signup = () => {
       position: "top-right",
       autoClose: 3000,
     });
-  
+
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "top",
     });
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -98,495 +92,507 @@ const Signup = () => {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "20px",
-      position: "relative",
-      overflow: "hidden"
-    }}>
-      {/* Animated Background Images with Parallax */}
-      <div style={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        top: 0,
-        left: 0,
-        zIndex: 0,
-        pointerEvents: "none",
-        overflow: "hidden"
-      }}>
-        {/* Background Image Layer 1 - Main */}
-        <div 
-          className="bg-image-layer-1"
-          style={{
-            position: "absolute",
-            width: "120%",
-            height: "120%",
-            top: "-10%",
-            left: "-10%",
-            backgroundImage: `url('${bgImage1}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 0.3,
-            animation: "parallaxSlow 20s ease-in-out infinite",
-            filter: "blur(2px) brightness(0.4)"
-          }}
-        ></div>
-        
-        {/* Background Image Layer 2 - Secondary */}
-        <div 
-          className="bg-image-layer-2"
-          style={{
-            position: "absolute",
-            width: "110%",
-            height: "110%",
-            top: "-5%",
-            right: "-5%",
-            backgroundImage: `url('${bgImage2}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 0.25,
-            animation: "parallaxMedium 25s ease-in-out infinite",
-            filter: "blur(3px) brightness(0.3)"
-          }}
-        ></div>
+    <div className="auth-page">
+      {/* Left: Form */}
+      <div className="auth-form-side">
+        <div className="auth-card">
+          <div className="auth-brand">
+            <div className="auth-brand-icon">
+              <span aria-hidden>🌱</span>
+            </div>
+            <h1 className="auth-title">FarmStack</h1>
+            <p className="auth-subtitle">Create your account and start your farming journey</p>
+          </div>
 
-        {/* Background Image Layer 3 - Overlay */}
-        <div 
-          className="bg-image-layer-3"
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            top: 0,
-            left: 0,
-            backgroundImage: `url('${bgImage3}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 0.2,
-            animation: "parallaxFast 15s ease-in-out infinite",
-            filter: "blur(1px) brightness(0.35)"
-          }}
-        ></div>
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="signup-name">Full Name</label>
+              <input
+                id="signup-name"
+                type="text"
+                name="name"
+                value={name}
+                onChange={handleOnChange}
+                required
+                placeholder="Enter your full name"
+                className="auth-input"
+                autoComplete="name"
+              />
+            </div>
 
-        {/* Gradient Overlay for better text readability */}
-        <div style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          top: 0,
-          left: 0,
-          background: "linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%)",
-          zIndex: 1
-        }}></div>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="signup-email">Email</label>
+              <input
+                id="signup-email"
+                type="email"
+                name="email"
+                value={email}
+                onChange={handleOnChange}
+                required
+                placeholder="name@example.com"
+                className="auth-input"
+                autoComplete="email"
+              />
+            </div>
 
-        {/* Floating Particles */}
-        <div style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          top: 0,
-          left: 0,
-          zIndex: 2
-        }}>
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              style={{
-                position: "absolute",
-                width: `${20 + i * 10}px`,
-                height: `${20 + i * 10}px`,
-                borderRadius: "50%",
-                background: "rgba(255, 255, 255, 0.1)",
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animation: `float ${6 + i * 2}s ease-in-out infinite ${i * 0.5}s`,
-                boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)"
-              }}
-            ></div>
-          ))}
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="signup-password">Password</label>
+              <div className="auth-input-wrap">
+                <input
+                  id="signup-password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={password}
+                  onChange={handleOnChange}
+                  required
+                  placeholder="Create a strong password"
+                  className="auth-input auth-input-password"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="auth-password-toggle"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? "👁️" : "👁️‍🗨️"}
+                </button>
+              </div>
+              {password && (
+                <div className="auth-password-strength">
+                  <div className="auth-strength-bars">
+                    {[1, 2, 3, 4, 5].map((level) => (
+                      <div
+                        key={level}
+                        className="auth-strength-bar"
+                        style={{
+                          background: level <= passwordStrength
+                            ? getPasswordStrengthColor()
+                            : 'hsl(220 13% 91%)',
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span
+                    className="auth-strength-label"
+                    style={{ color: getPasswordStrengthColor() }}
+                  >
+                    {passwordStrength <= 1 ? "Weak" : passwordStrength <= 3 ? "Medium" : "Strong"}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="auth-submit"
+            >
+              {isLoading ? (
+                <span className="auth-submit-loading">
+                  <span className="auth-spinner" aria-hidden />
+                  Creating account...
+                </span>
+              ) : (
+                "Create account"
+              )}
+            </button>
+
+            <p className="auth-footer">
+              Already have an account?{" "}
+              <Link to="/login" className="auth-link">Sign in</Link>
+            </p>
+          </form>
         </div>
+      </div>
+
+      {/* Right: Decorative (no photos, no animation) */}
+      <div className="auth-decor-side" aria-hidden>
+        <div className="auth-decor-gradient" />
       </div>
 
       <style>{`
+        * {
+          box-sizing: border-box;
+        }
+        
+        .auth-page {
+          min-height: 100vh;
+          display: flex;
+          width: 100%;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .auth-form-side {
+          flex: 1;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: clamp(1rem, 5vw, 3rem);
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+          position: relative;
+        }
+        
+        .auth-form-side::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
+          pointer-events: none;
+        }
+        
+        .auth-decor-side {
+          flex: 1;
+          min-height: 100vh;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%),
+                      url('/landing.png') center/cover no-repeat;
+          background-blend-mode: overlay;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .auth-decor-gradient {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(45deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.6) 100%);
+        }
+        
+        .auth-decor-side::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          right: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+          animation: float 6s ease-in-out infinite;
+        }
+        
         @keyframes float {
-          0%, 100% { 
-            transform: translateY(0px) translateX(0px) rotate(0deg); 
-            opacity: 0.3;
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-20px, -20px) rotate(180deg); }
+        }
+        
+        .auth-card {
+          width: 100%;
+          max-width: 420px;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border-radius: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+          padding: clamp(2rem, 5vw, 3rem);
+          position: relative;
+          z-index: 1;
+        }
+        
+        .auth-brand {
+          margin-bottom: 2.5rem;
+          text-align: center;
+        }
+        
+        .auth-brand-icon {
+          width: 4rem;
+          height: 4rem;
+          margin: 0 auto 1.5rem;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2rem;
+          box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+          position: relative;
+        }
+        
+        .auth-brand-icon::before {
+          content: '';
+          position: absolute;
+          inset: -2px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border-radius: 22px;
+          z-index: -1;
+          opacity: 0.5;
+          filter: blur(10px);
+        }
+        
+        .auth-title {
+          font-size: clamp(1.75rem, 4vw, 2rem);
+          font-weight: 700;
+          color: #1e293b;
+          margin: 0 0 0.5rem 0;
+          letter-spacing: -0.025em;
+        }
+        
+        .auth-subtitle {
+          font-size: 1rem;
+          color: #64748b;
+          margin: 0;
+          line-height: 1.5;
+        }
+        
+        .auth-form {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        
+        .auth-field {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        
+        .auth-label {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #374151;
+          letter-spacing: 0.025em;
+        }
+        
+        .auth-input {
+          width: 100%;
+          height: 3rem;
+          padding: 0 1rem;
+          font-size: 1rem;
+          border: 2px solid #e2e8f0;
+          border-radius: 12px;
+          outline: none;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(10px);
+        }
+        
+        .auth-input::placeholder {
+          color: #94a3b8;
+        }
+        
+        .auth-input:focus {
+          border-color: #667eea;
+          box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+          background: rgba(255, 255, 255, 1);
+          transform: translateY(-1px);
+        }
+        
+        .auth-input-wrap {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+        
+        .auth-input-password {
+          padding-right: 3rem;
+        }
+        
+        .auth-password-toggle {
+          position: absolute;
+          right: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #64748b;
+          font-size: 1.25rem;
+          padding: 0.5rem;
+          border-radius: 8px;
+          transition: all 0.2s;
+        }
+        
+        .auth-password-toggle:hover {
+          color: #374151;
+          background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .auth-password-strength {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-top: 0.5rem;
+          padding: 0.75rem;
+          background: rgba(248, 250, 252, 0.8);
+          border-radius: 12px;
+          border: 1px solid #e2e8f0;
+        }
+        
+        .auth-strength-bars {
+          display: flex;
+          gap: 6px;
+          flex: 1;
+        }
+        
+        .auth-strength-bar {
+          flex: 1;
+          height: 6px;
+          border-radius: 3px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: #e2e8f0;
+        }
+        
+        .auth-strength-label {
+          font-size: 0.8rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          min-width: 60px;
+          text-align: right;
+        }
+        
+        .auth-submit {
+          width: 100%;
+          height: 3.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          color: white;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          margin-top: 0.5rem;
+        }
+        
+        .auth-submit::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.5s;
+        }
+        
+        .auth-submit:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .auth-submit:hover:not(:disabled)::before {
+          left: 100%;
+        }
+        
+        .auth-submit:active:not(:disabled) {
+          transform: translateY(0);
+        }
+        
+        .auth-submit:disabled {
+          cursor: not-allowed;
+          opacity: 0.7;
+          transform: none;
+        }
+        
+        .auth-submit-loading {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+        }
+        
+        .auth-spinner {
+          width: 1.25rem;
+          height: 1.25rem;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top-color: white;
+          border-radius: 50%;
+          animation: auth-spin 0.8s linear infinite;
+        }
+        
+        @keyframes auth-spin {
+          to { transform: rotate(360deg); }
+        }
+        
+        .auth-footer {
+          font-size: 0.95rem;
+          color: #64748b;
+          margin: 1.5rem 0 0 0;
+          text-align: center;
+          line-height: 1.5;
+        }
+        
+        .auth-link {
+          color: #667eea;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.2s;
+          position: relative;
+        }
+        
+        .auth-link::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: #667eea;
+          transition: width 0.3s;
+        }
+        
+        .auth-link:hover::after {
+          width: 100%;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+          .auth-page { 
+            flex-direction: column; 
           }
-          25% { 
-            transform: translateY(-30px) translateX(20px) rotate(90deg); 
-            opacity: 0.5;
+          .auth-form-side { 
+            flex: none; 
+            min-height: auto; 
+            padding: 2rem 1rem; 
           }
-          50% { 
-            transform: translateY(-60px) translateX(-20px) rotate(180deg); 
-            opacity: 0.4;
-          }
-          75% { 
-            transform: translateY(-30px) translateX(10px) rotate(270deg); 
-            opacity: 0.5;
+          .auth-decor-side { 
+            flex: none; 
+            min-height: 40vh; 
+            order: -1;
           }
         }
-        @keyframes parallaxSlow {
-          0%, 100% { 
-            transform: translate(0, 0) scale(1);
+        
+        @media (max-width: 640px) {
+          .auth-form-side {
+            padding: 1rem;
           }
-          50% { 
-            transform: translate(-20px, -20px) scale(1.05);
+          .auth-card {
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
           }
-        }
-        @keyframes parallaxMedium {
-          0%, 100% { 
-            transform: translate(0, 0) scale(1);
+          .auth-decor-side {
+            min-height: 30vh;
           }
-          50% { 
-            transform: translate(30px, 30px) scale(1.08);
+          .auth-password-strength {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
           }
-        }
-        @keyframes parallaxFast {
-          0%, 100% { 
-            transform: translate(0, 0) scale(1);
-          }
-          50% { 
-            transform: translate(-15px, 15px) scale(1.03);
+          .auth-strength-label {
+            text-align: center;
+            min-width: auto;
           }
         }
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
+        
+        @media (max-width: 480px) {
+          .auth-card {
+            padding: 1.5rem 1rem;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          .auth-input {
+            height: 2.75rem;
+            font-size: 0.95rem;
           }
-        }
-        .signup-form-container {
-          animation: slideIn 0.6s ease-out;
-        }
-        @media (max-width: 768px) {
-          .bg-image-layer-1,
-          .bg-image-layer-2,
-          .bg-image-layer-3 {
-            filter: blur(3px) brightness(0.2) !important;
+          .auth-submit {
+            height: 3rem;
           }
         }
       `}</style>
-
-      <div className="signup-form-container" style={{
-        width: "100%",
-        maxWidth: "480px",
-        background: "rgba(255, 255, 255, 0.98)",
-        backdropFilter: "blur(20px)",
-        borderRadius: "32px",
-        padding: "3rem 2.5rem",
-        boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        position: "relative",
-        zIndex: 1
-      }}>
-        {/* Logo/Brand Section */}
-        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-          <div style={{
-            width: "80px",
-            height: "80px",
-            margin: "0 auto 1.5rem",
-            background: "linear-gradient(135deg, #667eea, #764ba2)",
-            borderRadius: "20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 10px 30px rgba(102, 126, 234, 0.4)"
-          }}>
-            <span style={{ fontSize: "2.5rem" }}>🌱</span>
-          </div>
-          <h1 style={{
-            fontSize: "clamp(2rem, 5vw, 2.5rem)",
-            fontWeight: "700",
-            margin: "0 0 0.5rem 0",
-            background: "linear-gradient(135deg, #667eea, #764ba2)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text"
-          }}>
-            FramStack
-          </h1>
-          <p style={{
-            color: "#6b7280",
-            fontSize: "1rem",
-            margin: 0,
-            fontWeight: "400"
-          }}>
-            Create your account and start your farming journey
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          {/* Name Input */}
-          <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "0.5rem",
-              color: "#374151",
-              fontSize: "0.875rem",
-              fontWeight: "600"
-            }}>
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={handleOnChange}
-              required
-              placeholder="Enter your full name"
-              style={{
-                width: "100%",
-                padding: "0.875rem 1rem",
-                fontSize: "1rem",
-                border: "2px solid #e5e7eb",
-                borderRadius: "12px",
-                outline: "none",
-                transition: "all 0.3s ease",
-                boxSizing: "border-box"
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#667eea";
-                e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#e5e7eb";
-                e.target.style.boxShadow = "none";
-              }}
-            />
-          </div>
-
-          {/* Email Input */}
-          <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "0.5rem",
-              color: "#374151",
-              fontSize: "0.875rem",
-              fontWeight: "600"
-            }}>
-              Email Address
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={handleOnChange}
-              required
-              placeholder="Enter your email"
-              style={{
-                width: "100%",
-                padding: "0.875rem 1rem",
-                fontSize: "1rem",
-                border: "2px solid #e5e7eb",
-                borderRadius: "12px",
-                outline: "none",
-                transition: "all 0.3s ease",
-                boxSizing: "border-box"
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#667eea";
-                e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#e5e7eb";
-                e.target.style.boxShadow = "none";
-              }}
-            />
-          </div>
-
-          {/* Password Input */}
-          <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "0.5rem",
-              color: "#374151",
-              fontSize: "0.875rem",
-              fontWeight: "600"
-            }}>
-              Password
-            </label>
-            <div style={{ position: "relative" }}>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={password}
-                onChange={handleOnChange}
-                required
-                placeholder="Create a strong password"
-                style={{
-                  width: "100%",
-                  padding: "0.875rem 1rem 0.875rem 1rem",
-                  fontSize: "1rem",
-                  border: "2px solid #e5e7eb",
-                  borderRadius: "12px",
-                  outline: "none",
-                  transition: "all 0.3s ease",
-                  boxSizing: "border-box"
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "#667eea";
-                  e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#e5e7eb";
-                  e.target.style.boxShadow = "none";
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: "absolute",
-                  right: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#6b7280",
-                  fontSize: "1.2rem",
-                  padding: "0.5rem"
-                }}
-              >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
-              </button>
-            </div>
-            {/* Password Strength Indicator */}
-            {password && (
-              <div style={{ marginTop: "0.5rem" }}>
-                <div style={{
-                  display: "flex",
-                  gap: "4px",
-                  marginBottom: "0.25rem"
-                }}>
-                  {[1, 2, 3, 4, 5].map((level) => (
-                    <div
-                      key={level}
-                      style={{
-                        flex: 1,
-                        height: "4px",
-                        borderRadius: "2px",
-                        background: level <= passwordStrength 
-                          ? getPasswordStrengthColor() 
-                          : "#e5e7eb",
-                        transition: "background 0.3s ease"
-                      }}
-                    />
-                  ))}
-                </div>
-                <p style={{
-                  fontSize: "0.75rem",
-                  color: passwordStrength <= 1 ? "#ef4444" : passwordStrength <= 3 ? "#f59e0b" : "#10b981",
-                  margin: 0,
-                  fontWeight: "500"
-                }}>
-                  {passwordStrength <= 1 ? "Weak" : passwordStrength <= 3 ? "Medium" : "Strong"} password
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            style={{
-              width: "100%",
-              padding: "0.875rem",
-              fontSize: "1rem",
-              fontWeight: "600",
-              background: isLoading 
-                ? "#9ca3af" 
-                : "linear-gradient(135deg, #667eea, #764ba2)",
-              border: "none",
-              borderRadius: "12px",
-              color: "white",
-              cursor: isLoading ? "not-allowed" : "pointer",
-              transition: "all 0.3s ease",
-              boxShadow: isLoading 
-                ? "none" 
-                : "0 4px 15px rgba(102, 126, 234, 0.4)",
-              marginBottom: "1.5rem"
-            }}
-            onMouseOver={(e) => {
-              if (!isLoading) {
-                e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = "0 6px 20px rgba(102, 126, 234, 0.5)";
-              }
-            }}
-            onMouseOut={(e) => {
-              if (!isLoading) {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.4)";
-              }
-            }}
-          >
-            {isLoading ? (
-              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                <span style={{
-                  width: "16px",
-                  height: "16px",
-                  border: "2px solid rgba(255,255,255,0.3)",
-                  borderTop: "2px solid white",
-                  borderRadius: "50%",
-                  animation: "spin 0.8s linear infinite",
-                  display: "inline-block"
-                }}></span>
-                Creating account...
-              </span>
-            ) : (
-              "Create Account"
-            )}
-          </button>
-
-          <style>{`
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
-
-          {/* Login Link */}
-          <div style={{
-            textAlign: "center",
-            paddingTop: "1.5rem",
-            borderTop: "1px solid #e5e7eb"
-          }}>
-            <p style={{
-              color: "#6b7280",
-              fontSize: "0.875rem",
-              margin: "0 0 0.5rem 0"
-            }}>
-              Already have an account?
-            </p>
-            <Link
-              to="/login"
-              style={{
-                color: "#667eea",
-                fontWeight: "600",
-                textDecoration: "none",
-                fontSize: "0.875rem",
-                transition: "color 0.3s ease"
-              }}
-              onMouseOver={(e) => e.target.style.color = "#764ba2"}
-              onMouseOut={(e) => e.target.style.color = "#667eea"}
-            >
-              Sign in instead →
-            </Link>
-          </div>
-        </form>
-
-        <Toaster />
-      </div>
+      <Toaster />
     </div>
   );
 };
