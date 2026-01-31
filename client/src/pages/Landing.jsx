@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import { MdPsychology, MdAnalytics, MdEco, MdAgriculture } from 'react-icons/md';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -37,12 +38,12 @@ const Landing = () => {
           <div className="landing-content">
             <div className="landing-hero-card">
               <div className="hero-badge">
-                <span className="badge-icon">🌾</span>
+                <MdAgriculture className="badge-icon" />
                 <span className="badge-text">Smart Farming</span>
               </div>
               
               <h1 className="landing-title">
-                {t('Title')}
+                {t('FarmStack')}
               </h1>
               
               <h2 className="landing-slogan">
@@ -61,15 +62,15 @@ const Landing = () => {
                 
                 <div className="landing-features">
                   <div className="feature-item">
-                    <span className="feature-icon">🤖</span>
+                    <MdPsychology className="feature-icon" />
                     <span className="feature-text">AI Powered</span>
                   </div>
                   <div className="feature-item">
-                    <span className="feature-icon">📊</span>
+                    <MdAnalytics className="feature-icon" />
                     <span className="feature-text">Data Driven</span>
                   </div>
                   <div className="feature-item">
-                    <span className="feature-icon">🌱</span>
+                    <MdEco className="feature-icon" />
                     <span className="feature-text">Sustainable</span>
                   </div>
                 </div>
@@ -240,6 +241,7 @@ const Landing = () => {
 
         .badge-icon {
           font-size: 1.25rem;
+          color: rgba(255, 255, 255, 0.9);
         }
 
         .badge-text {
@@ -351,6 +353,7 @@ const Landing = () => {
 
         .feature-icon {
           font-size: 1.25rem;
+          color: #3b82f6;
         }
 
         .feature-text {

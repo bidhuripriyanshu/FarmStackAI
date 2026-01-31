@@ -8,6 +8,17 @@ import NewCropCard from '../components/NewCropCard'
 import url from '../url';
 import getCropDetails from "../util/CropDetails";
 import { useTranslation } from 'react-i18next';
+import { 
+  MdAgriculture, 
+  MdAnalytics, 
+  MdEco, 
+  MdThermostat, 
+  MdWaterDrop, 
+  MdTrendingUp,
+  MdScience,
+  MdCloud,
+  MdLightbulb
+} from 'react-icons/md';
 import './Home.css';
 
 const Home = () => {
@@ -51,7 +62,6 @@ const Home = () => {
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
 
-  //api for post of data
   useEffect(() => {
     if (id) {
       setIsLoading(true);
@@ -78,96 +88,219 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container">
-      {/* Animated Background */}
-      <div className="background-animation">
-        <div className="floating-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-          <div className="shape shape-4"></div>
+    <>
+      <div className="home-page">
+        {/* Background Elements */}
+        <div className="home-bg-gradient" />
+        <div className="home-bg-pattern" />
+        <div className="home-floating-elements">
+          <div className="floating-element element-1" />
+          <div className="floating-element element-2" />
+          <div className="floating-element element-3" />
         </div>
-      </div>
 
-      {/* Hero Section */}
-      <div className="hero-section">
-        <div className="hero-content">
-          <div className="welcome-card">
-            <div className="user-greeting">
-              <div className="greeting-icon">🌾</div>
-              <div className="greeting-text">
-                <h1 className="greeting-title">{getGreeting()}, {username}!</h1>
-                <p className="greeting-subtitle">Discover your perfect crops for today</p>
-              </div>
-            </div>
-            <div className="stats-container">
-              <div className="stat-card">
-                <div className="stat-icon">📊</div>
-                <div className="stat-info">
-                  <h3>5</h3>
-                  <p>Recommended Crops</p>
+        <div className="home-container">
+          {/* Welcome Header */}
+          <div className="welcome-header">
+            <div className="welcome-card">
+              <div className="welcome-content">
+                <div className="welcome-icon">
+                  <MdAgriculture />
                 </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">🌱</div>
-                <div className="stat-info">
-                  <h3>100%</h3>
-                  <p>AI Optimized</p>
+                <div className="welcome-text">
+                  <h1 className="welcome-title">
+                    {getGreeting()}, {username}!
+                  </h1>
+                  <p className="welcome-subtitle">
+                    Welcome to your personalized farming dashboard
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="main-content">
-        {isLoading ? (
-          <div className="loading-container">
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-            </div>
-            <p className="loading-text">Analyzing your soil data...</p>
-          </div>
-        ) : (
-          <div className="crop-recommendations">
-            <div className="section-header">
-              <h2 className="section-title">Your Crop Recommendations</h2>
-              <p className="section-subtitle">Based on your soil analysis and climate conditions</p>
-            </div>
-            
-            <div className="crop-cards-container">
-              {crops.length > 0 && (
-                <div className="featured-crop">
-                  <NewCropCard crop={crops[0]} crops={crops} />
+          {/* Dashboard Grid */}
+          <div className="dashboard-grid">
+            {/* Left Column - Main Content */}
+            <div className="main-column">
+              {isLoading ? (
+                <div className="loading-card">
+                  <div className="card-header">
+                    <MdAnalytics className="header-icon" />
+                    <div className="header-text">
+                      <h2>Analyzing Your Data</h2>
+                      <p>Processing your farming information...</p>
+                    </div>
+                  </div>
+                  <div className="card-content">
+                    <div className="loading-spinner">
+                      <div className="spinner" />
+                    </div>
+                    <p className="loading-text">
+                      Processing soil conditions and climate data for optimal recommendations...
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="recommendations-card">
+                  <div className="card-header">
+                    <MdLightbulb className="header-icon" />
+                    <div className="header-text">
+                      <h2>Your Crop Recommendations</h2>
+                      <p>AI-powered suggestions based on your data</p>
+                    </div>
+                  </div>
+                  <div className="card-content">
+                    {crops.length > 0 ? (
+                      <div className="crop-display">
+                        <NewCropCard crop={crops[0]} crops={crops} />
+                      </div>
+                    ) : (
+                      <div className="no-data">
+                        <MdEco className="no-data-icon" />
+                        <h3>No Recommendations Yet</h3>
+                        <p>Complete your profile to get personalized crop recommendations</p>
+                        <button 
+                          className="update-btn"
+                          onClick={() => navigate('/update')}
+                        >
+                          Update Profile
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
+
+              {/* Quick Actions */}
+              <div className="actions-card">
+                <div className="card-header">
+                  <MdTrendingUp className="header-icon" />
+                  <div className="header-text">
+                    <h2>Quick Actions</h2>
+                    <p>Manage your farming activities</p>
+                  </div>
+                </div>
+                <div className="card-content">
+                  <div className="actions-grid">
+                    <button 
+                      className="action-btn"
+                      onClick={() => navigate('/update')}
+                    >
+                      <MdScience className="action-icon" />
+                      <span>Update Soil Data</span>
+                    </button>
+                    <button 
+                      className="action-btn"
+                      onClick={() => navigate('/forum')}
+                    >
+                      <MdAnalytics className="action-icon" />
+                      <span>Community Forum</span>
+                    </button>
+                    <button 
+                      className="action-btn"
+                      onClick={() => navigate('/posts')}
+                    >
+                      <MdLightbulb className="action-icon" />
+                      <span>View Posts</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Additional Features */}
-            <div className="features-grid">
-              <div className="feature-card">
-                <div className="feature-icon">🌡️</div>
-                <h3>Weather Insights</h3>
-                <p>Get real-time weather data for optimal planting</p>
+            {/* Right Column - Stats & Features */}
+            <div className="sidebar-column">
+              {/* Stats Card */}
+              <div className="stats-card">
+                <div className="card-header">
+                  <MdAnalytics className="header-icon" />
+                  <div className="header-text">
+                    <h2>Your Stats</h2>
+                    <p>Current farming metrics</p>
+                  </div>
+                </div>
+                <div className="card-content">
+                  <div className="stats-list">
+                    <div className="stat-item">
+                      <div className="stat-icon">
+                        <MdEco />
+                      </div>
+                      <div className="stat-details">
+                        <span className="stat-value">5</span>
+                        <span className="stat-label">Recommended Crops</span>
+                      </div>
+                    </div>
+                    <div className="stat-item">
+                      <div className="stat-icon">
+                        <MdScience />
+                      </div>
+                      <div className="stat-details">
+                        <span className="stat-value">100%</span>
+                        <span className="stat-label">AI Optimized</span>
+                      </div>
+                    </div>
+                    <div className="stat-item">
+                      <div className="stat-icon">
+                        <MdTrendingUp />
+                      </div>
+                      <div className="stat-details">
+                        <span className="stat-value">Smart</span>
+                        <span className="stat-label">Analysis Ready</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="feature-card">
-                <div className="feature-icon">💧</div>
-                <h3>Water Management</h3>
-                <p>Smart irrigation recommendations</p>
-              </div>
-              <div className="feature-card">
-                <div className="feature-icon">📈</div>
-                <h3>Growth Tracking</h3>
-                <p>Monitor your crop progress</p>
+
+              {/* Features Card */}
+              <div className="features-card">
+                <div className="card-header">
+                  <MdCloud className="header-icon" />
+                  <div className="header-text">
+                    <h2>Smart Features</h2>
+                    <p>Available tools for you</p>
+                  </div>
+                </div>
+                <div className="card-content">
+                  <div className="features-list">
+                    <div className="feature-item">
+                      <MdThermostat className="feature-icon" />
+                      <div className="feature-info">
+                        <h4>Weather Insights</h4>
+                        <p>Real-time weather data</p>
+                      </div>
+                    </div>
+                    <div className="feature-item">
+                      <MdWaterDrop className="feature-icon" />
+                      <div className="feature-info">
+                        <h4>Water Management</h4>
+                        <p>Smart irrigation tips</p>
+                      </div>
+                    </div>
+                    <div className="feature-item">
+                      <MdScience className="feature-icon" />
+                      <div className="feature-info">
+                        <h4>Soil Health</h4>
+                        <p>Comprehensive analysis</p>
+                      </div>
+                    </div>
+                    <div className="feature-item">
+                      <MdEco className="feature-icon" />
+                      <div className="feature-info">
+                        <h4>Sustainability</h4>
+                        <p>Eco-friendly practices</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
-
       <ToastContainer />
-    </div>
+    </>
   );
 };
 

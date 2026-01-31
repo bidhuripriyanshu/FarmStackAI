@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import "../assets/Button.css";
 import toast, { Toaster } from 'react-hot-toast';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +7,18 @@ import url from '../url';
 import LanguageSelector from '../components/LanguageSelector';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
+import { 
+  MdScience, 
+  MdLocationOn, 
+  MdAutoAwesome, 
+  MdSave,
+  MdThermostat,
+  MdWaterDrop,
+  MdGrass,
+  MdCloud,
+  MdBiotech,
+  MdElectricBolt
+} from 'react-icons/md';
 
 const id = Cookies.get("id");
 const lang = Cookies.get('language');
@@ -99,14 +110,12 @@ const Update = () => {
     });
   };
 
-  // AI Auto-fill functionality
   const handleLocationChange = async (e) => {
     const value = e.target.value;
     setLocation(value);
     
     if (value.length > 2) {
       try {
-        // Simulate location suggestions (in real implementation, you'd call a geocoding API)
         const mockSuggestions = [
           `${value}, Maharashtra, India`,
           `${value}, Karnataka, India`,
@@ -138,8 +147,6 @@ const Update = () => {
 
     setIsAutoFilling(true);
     try {
-      // Simulate AI-based soil data fetching
-      // In real implementation, you'd call your AI service
       const mockSoilData = {
         Nitrogen: Math.floor(Math.random() * 140) + 10,
         Phosphorus: Math.floor(Math.random() * 140) + 10,
@@ -150,7 +157,6 @@ const Update = () => {
         Rainfall: Math.floor(Math.random() * 200) + 50
       };
 
-      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       setFormData(prev => ({
@@ -201,307 +207,612 @@ const Update = () => {
   };
 
   return (
-    <div className="min-vh-100" style={{
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Animated Background */}
-      <div className="position-fixed w-100 h-100" style={{ zIndex: 1, pointerEvents: 'none' }}>
-        <div className="position-absolute" style={{ top: '15%', left: '10%', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', animation: 'float 8s ease-in-out infinite' }}></div>
-        <div className="position-absolute" style={{ top: '70%', right: '15%', width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', animation: 'float 8s ease-in-out infinite 2s' }}></div>
-        <div className="position-absolute" style={{ bottom: '30%', left: '20%', width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', animation: 'float 8s ease-in-out infinite 4s' }}></div>
-      </div>
-
-      <div className="container-fluid py-3 py-md-4 px-2 px-md-3" style={{ position: 'relative', zIndex: 2 }}>
-        <div className="row justify-content-center">
-          <div className="col-12 col-lg-10 col-xl-8">
-            <div className="card shadow-lg border-0" style={{
-              background: 'rgba(255,255,255,0.95)',
-              backdropFilter: 'blur(20px)',
-              borderRadius: '24px',
-              border: '1px solid rgba(255,255,255,0.2)'
-            }}>
-              <div className="card-body p-3 p-md-4 p-lg-5">
-                {/* Header */}
-                <div className="text-center mb-4 mb-md-5">
-                  <div className="d-flex align-items-center justify-content-center mb-2 mb-md-3 flex-column flex-md-row">
-                    <span className="fs-1 me-0 me-md-3 mb-2 mb-md-0" style={{ animation: 'bounce 2s infinite' }}>🌱</span>
-                    <h1 className="mb-0" style={{
-                      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                      fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                      fontWeight: '700'
-                    }}>
-                      {t('URecomSystem')}
-                    </h1>
-                  </div>
-                  <p className="text-muted mb-0" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.25rem)' }}>Update your soil parameters for better crop recommendations</p>
-                </div>
-
-                {/* AI Auto-fill Section */}
-                <div className="card mb-4 border-0" style={{
-                  background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                  borderRadius: '20px',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}>
-                  <div className="card-body p-4 text-white" style={{ position: 'relative', zIndex: 1 }}>
-                    <div className="d-flex align-items-center mb-3">
-                      <span className="fs-2 me-3" style={{ animation: 'pulse 2s infinite' }}>🤖</span>
-                      <h3 className="mb-0">AI Auto-Fill System</h3>
-                    </div>
-                    
-                    <div className="row g-2 g-md-3">
-                      <div className="col-12 col-md-8">
-                        <input
-                          type="text"
-                          className="form-control"
-                          style={{
-                            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                            background: 'rgba(255,255,255,0.1)',
-                            border: '2px solid rgba(255,255,255,0.3)',
-                            color: 'white',
-                            backdropFilter: 'blur(10px)'
-                          }}
-                          placeholder="Enter your location (e.g., Mumbai, Maharashtra)"
-                          value={location}
-                          onChange={handleLocationChange}
-                        />
-                        {showSuggestions && suggestions.length > 0 && (
-                          <div className="position-absolute w-100 mt-1" style={{ zIndex: 10, maxWidth: 'calc(100% - 2rem)' }}>
-                            <div className="card shadow-lg">
-                              {suggestions.map((suggestion, index) => (
-                                <div
-                                  key={index}
-                                  className="p-2 p-md-3 border-bottom cursor-pointer"
-                                  onClick={() => selectLocation(suggestion)}
-                                  style={{ cursor: 'pointer', fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}
-                                >
-                                  📍 {suggestion}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-12 col-md-4">
-                        <button
-                          type="button"
-                          onClick={autoFillSoilData}
-                          disabled={isAutoFilling || !location}
-                          className="btn btn-light w-100 d-flex align-items-center justify-content-center"
-                          style={{
-                            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                            padding: '0.75rem',
-                            background: 'rgba(255,255,255,0.2)',
-                            border: '2px solid rgba(255,255,255,0.3)',
-                            color: 'white',
-                            backdropFilter: 'blur(10px)'
-                          }}
-                        >
-                          {isAutoFilling ? (
-                            <>
-                              <div className="spinner-border spinner-border-sm me-2" role="status"></div>
-                              Analyzing...
-                            </>
-                          ) : (
-                            <>
-                              🔍 Auto-Fill
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Soil Form */}
-                <form onSubmit={handleSubmit}>
-                  <div className="row g-4">
-                    <div className="col-md-6">
-                      <div className="form-floating">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="Nitrogen"
-                          name="Nitrogen"
-                          placeholder="Enter Nitrogen"
-                          value={formData.Nitrogen}
-                          onChange={handleChange}
-                          min="0"
-                          max="150"
-                          required
-                        />
-                        <label htmlFor="Nitrogen">
-                          🌿 {t('Nitrogen')} (0-150 mg/kg)
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-floating">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="Phosphorus"
-                          name="Phosphorus"
-                          placeholder="Enter Phosphorus"
-                          value={formData.Phosphorus}
-                          onChange={handleChange}
-                          min="0"
-                          max="150"
-                          required
-                        />
-                        <label htmlFor="Phosphorus">
-                          💎 {t('Phosphorus')} (0-150 mg/kg)
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-floating">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="Potassium"
-                          name="Potassium"
-                          placeholder="Enter Potassium"
-                          value={formData.Potassium}
-                          onChange={handleChange}
-                          min="0"
-                          max="250"
-                          required
-                        />
-                        <label htmlFor="Potassium">
-                          ⚡ {t('Potassium')} (0-250 mg/kg)
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-floating">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="Temperature"
-                          name="Temperature"
-                          placeholder="Enter Temperature"
-                          value={formData.Temperature}
-                          onChange={handleChange}
-                          min="0"
-                          max="50"
-                          required
-                        />
-                        <label htmlFor="Temperature">
-                          🌡️ {t('Temperature')} (0-50°C)
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-floating">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="Humidity"
-                          name="Humidity"
-                          placeholder="Enter Humidity"
-                          value={formData.Humidity}
-                          onChange={handleChange}
-                          min="10"
-                          max="100"
-                          required
-                        />
-                        <label htmlFor="Humidity">
-                          💧 {t('Humidity')} (10-100%)
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-floating">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="pH"
-                          name="pH"
-                          placeholder="Enter pH"
-                          value={formData.pH}
-                          onChange={handleChange}
-                          min="2"
-                          max="10"
-                          step="0.1"
-                          required
-                        />
-                        <label htmlFor="pH">
-                          🧪 {t('pH')} (2.0-10.0)
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-floating">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="Rainfall"
-                          name="Rainfall"
-                          placeholder="Enter Rainfall"
-                          value={formData.Rainfall}
-                          onChange={handleChange}
-                          min="15"
-                          max="300"
-                          required
-                        />
-                        <label htmlFor="Rainfall">
-                          🌧️ {t('Rainfall')} (15-300 cm)
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="text-center mt-4 mt-md-5">
-                    <button
-                      type="submit"
-                      className="btn btn-primary w-100 w-md-auto px-4 px-md-5 py-2 py-md-3 d-inline-flex align-items-center justify-content-center"
-                      disabled={isLoading}
-                      style={{
-                        fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
-                        background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                        border: 'none',
-                        boxShadow: '0 10px 25px rgba(102, 126, 234, 0.3)'
-                      }}
-                    >
-                      {isLoading ? (
-                        <>
-                          <div className="spinner-border spinner-border-sm me-2" role="status"></div>
-                          Updating...
-                        </>
-                      ) : (
-                        <>
-                          💾 {t('UButton')}
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
+    <>
+      <div className="update-page">
+        {/* Background Elements */}
+        <div className="update-bg-gradient" />
+        <div className="update-bg-pattern" />
+        
+        <div className="update-container">
+          <div className="update-content">
+            {/* Header Section */}
+            <div className="update-header">
+              <div className="header-icon">
+                <MdScience />
               </div>
+              <h1 className="update-title">{t('URecomSystem')}</h1>
+              <p className="update-subtitle">
+                Update your soil parameters for precise crop recommendations
+              </p>
+            </div>
+
+            {/* Auto-fill Section */}
+            <div className="autofill-section">
+              <div className="autofill-header">
+                <MdAutoAwesome className="autofill-icon" />
+                <h3>Smart Location Analysis</h3>
+              </div>
+              
+              <div className="autofill-form">
+                <div className="location-input-wrapper">
+                  <MdLocationOn className="input-icon" />
+                  <input
+                    type="text"
+                    className="location-input"
+                    placeholder="Enter your location (e.g., Mumbai, Maharashtra)"
+                    value={location}
+                    onChange={handleLocationChange}
+                  />
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="suggestions-dropdown">
+                      {suggestions.map((suggestion, index) => (
+                        <div
+                          key={index}
+                          className="suggestion-item"
+                          onClick={() => selectLocation(suggestion)}
+                        >
+                          <MdLocationOn className="suggestion-icon" />
+                          {suggestion}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
+                <button
+                  type="button"
+                  onClick={autoFillSoilData}
+                  disabled={isAutoFilling || !location}
+                  className="autofill-btn"
+                >
+                  {isAutoFilling ? (
+                    <>
+                      <div className="spinner" />
+                      Analyzing...
+                    </>
+                  ) : (
+                    <>
+                      <MdAutoAwesome />
+                      Auto-Fill Data
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Form Section */}
+            <form onSubmit={handleSubmit} className="update-form">
+              <div className="form-grid">
+                <div className="form-group">
+                  <label className="form-label">
+                    <MdGrass className="label-icon" />
+                    {t('Nitrogen')}
+                  </label>
+                  <input
+                    type="number"
+                    name="Nitrogen"
+                    value={formData.Nitrogen}
+                    onChange={handleChange}
+                    min="0"
+                    max="150"
+                    required
+                    className="form-input"
+                    placeholder="0-150 mg/kg"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <MdBiotech className="label-icon" />
+                    {t('Phosphorus')}
+                  </label>
+                  <input
+                    type="number"
+                    name="Phosphorus"
+                    value={formData.Phosphorus}
+                    onChange={handleChange}
+                    min="0"
+                    max="150"
+                    required
+                    className="form-input"
+                    placeholder="0-150 mg/kg"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <MdElectricBolt className="label-icon" />
+                    {t('Potassium')}
+                  </label>
+                  <input
+                    type="number"
+                    name="Potassium"
+                    value={formData.Potassium}
+                    onChange={handleChange}
+                    min="0"
+                    max="250"
+                    required
+                    className="form-input"
+                    placeholder="0-250 mg/kg"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <MdThermostat className="label-icon" />
+                    {t('Temperature')}
+                  </label>
+                  <input
+                    type="number"
+                    name="Temperature"
+                    value={formData.Temperature}
+                    onChange={handleChange}
+                    min="0"
+                    max="50"
+                    required
+                    className="form-input"
+                    placeholder="0-50°C"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <MdWaterDrop className="label-icon" />
+                    {t('Humidity')}
+                  </label>
+                  <input
+                    type="number"
+                    name="Humidity"
+                    value={formData.Humidity}
+                    onChange={handleChange}
+                    min="10"
+                    max="100"
+                    required
+                    className="form-input"
+                    placeholder="10-100%"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <MdScience className="label-icon" />
+                    {t('pH')}
+                  </label>
+                  <input
+                    type="number"
+                    name="pH"
+                    value={formData.pH}
+                    onChange={handleChange}
+                    min="2"
+                    max="10"
+                    step="0.1"
+                    required
+                    className="form-input"
+                    placeholder="2.0-10.0"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <MdCloud className="label-icon" />
+                    {t('Rainfall')}
+                  </label>
+                  <input
+                    type="number"
+                    name="Rainfall"
+                    value={formData.Rainfall}
+                    onChange={handleChange}
+                    min="15"
+                    max="300"
+                    required
+                    className="form-input"
+                    placeholder="15-300 cm"
+                  />
+                </div>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="submit-btn"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="spinner" />
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <MdSave />
+                      {t('UButton')}
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+
+            {/* Language Selector */}
+            <div className="language-section">
+              <LanguageSelector 
+                selectedLanguage={selectedLanguage} 
+                setSelectedLanguage={setSelectedLanguage} 
+              />
             </div>
           </div>
         </div>
-
-        <div className="row justify-content-center mt-4">
-          <div className="col-auto">
-            <LanguageSelector selectedLanguage={selectedLanguage} setSelectedLanguage={setSelectedLanguage} />
-          </div>
-        </div>
       </div>
 
+      <style>{`
+        .update-page {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          position: relative;
+          overflow: hidden;
+          padding-top: 80px;
+        }
+
+        .update-bg-gradient {
+          position: absolute;
+          inset: 0;
+          background: 
+            radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%);
+          animation: gradientShift 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientShift {
+          0% { opacity: 0.7; }
+          100% { opacity: 1; }
+        }
+
+        .update-bg-pattern {
+          position: absolute;
+          inset: 0;
+          background-image: 
+            radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+          background-size: 40px 40px;
+          animation: patternMove 30s linear infinite;
+        }
+
+        @keyframes patternMove {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(40px, 40px); }
+        }
+
+        .update-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 2rem clamp(1rem, 5vw, 2rem);
+          position: relative;
+          z-index: 10;
+        }
+
+        .update-content {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(20px);
+          border-radius: 32px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: clamp(2rem, 5vw, 3rem);
+          box-shadow: 
+            0 32px 64px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .update-header {
+          text-align: center;
+          margin-bottom: 3rem;
+        }
+
+        .header-icon {
+          width: 4rem;
+          height: 4rem;
+          margin: 0 auto 1.5rem;
+          background: linear-gradient(135deg, #3b82f6, #9333ea);
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2rem;
+          color: white;
+          box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .update-title {
+          font-size: clamp(2rem, 5vw, 2.5rem);
+          font-weight: 800;
+          background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: 1rem;
+          letter-spacing: -0.02em;
+        }
+
+        .update-subtitle {
+          font-size: 1.1rem;
+          color: rgba(255, 255, 255, 0.7);
+          margin: 0;
+          line-height: 1.6;
+        }
+
+        .autofill-section {
+          background: rgba(59, 130, 246, 0.1);
+          border: 1px solid rgba(59, 130, 246, 0.2);
+          border-radius: 20px;
+          padding: 2rem;
+          margin-bottom: 3rem;
+          backdrop-filter: blur(10px);
+        }
+
+        .autofill-header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .autofill-icon {
+          font-size: 1.5rem;
+          color: #3b82f6;
+        }
+
+        .autofill-header h3 {
+          color: white;
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .autofill-form {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 1rem;
+          align-items: start;
+        }
+
+        .location-input-wrapper {
+          position: relative;
+        }
+
+        .location-input {
+          width: 100%;
+          height: 3rem;
+          padding: 0 1rem 0 3rem;
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          outline: none;
+          transition: all 0.3s;
+        }
+
+        .location-input::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        .location-input:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .input-icon {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 1.25rem;
+        }
+
+        .suggestions-dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border-radius: 12px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          z-index: 100;
+          margin-top: 0.5rem;
+        }
+
+        .suggestion-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 1rem;
+          color: #374151;
+          cursor: pointer;
+          transition: all 0.2s;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-item:last-child {
+          border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+          background: rgba(59, 130, 246, 0.1);
+        }
+
+        .suggestion-icon {
+          color: #3b82f6;
+          font-size: 1rem;
+        }
+
+        .autofill-btn {
+          height: 3rem;
+          padding: 0 2rem;
+          background: linear-gradient(135deg, #3b82f6, #9333ea);
+          color: white;
+          border: none;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          white-space: nowrap;
+        }
+
+        .autofill-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+        }
+
+        .autofill-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        .update-form {
+          margin-bottom: 2rem;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          margin-bottom: 3rem;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .form-label {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: rgba(255, 255, 255, 0.9);
+          font-weight: 600;
+          font-size: 0.95rem;
+        }
+
+        .label-icon {
+          color: #3b82f6;
+          font-size: 1.1rem;
+        }
+
+        .form-input {
+          height: 3rem;
+          padding: 0 1rem;
+          background: rgba(255, 255, 255, 0.05);
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          outline: none;
+          transition: all 0.3s;
+        }
+
+        .form-input::placeholder {
+          color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-input:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: center;
+        }
+
+        .submit-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 1rem 3rem;
+          background: linear-gradient(135deg, #3b82f6, #9333ea);
+          color: white;
+          border: none;
+          border-radius: 16px;
+          font-size: 1.1rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s;
+          box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+          transform: translateY(-3px);
+          box-shadow: 0 16px 48px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        .spinner {
+          width: 1rem;
+          height: 1rem;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top-color: white;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        .language-section {
+          display: flex;
+          justify-content: center;
+          margin-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .update-page {
+            padding-top: 70px;
+          }
+
+          .autofill-form {
+            grid-template-columns: 1fr;
+          }
+
+          .form-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+
+          .submit-btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .update-container {
+            padding: 1rem;
+          }
+
+          .update-content {
+            padding: 1.5rem;
+          }
+
+          .autofill-section {
+            padding: 1.5rem;
+          }
+        }
+      `}</style>
       <Toaster />
-    </div>
+    </>
   );
 };
 

@@ -1,7 +1,16 @@
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { MdExitToApp, MdMenu, MdClose } from "react-icons/md";
+import { 
+  MdExitToApp, 
+  MdMenu, 
+  MdClose, 
+  MdHome, 
+  MdUpdate, 
+  MdForum, 
+  MdArticle,
+  MdAgriculture 
+} from "react-icons/md";
 import { useState, useEffect } from "react";
 import '../util/config';
 import url from '../url';
@@ -50,28 +59,28 @@ const Navbar = () => {
           {/* Logo/Brand */}
           <div className="navbar-brand" onClick={() => handleNavClick('/landing')}>
             <div className="brand-icon">
-              <span>🌾</span>
+              <MdAgriculture />
             </div>
-            <span className="brand-text">{t('Title')}</span>
+            <span className="brand-text">{t('FarmStack')}</span>
           </div>
 
           {/* Desktop Navigation */}
           <div className="navbar-menu desktop-menu">
             <a className="nav-link" onClick={() => handleNavClick('/')}>
-              <span className="nav-icon">🏠</span>
+              <MdHome className="nav-icon" />
               {t('NHome')}
             </a>
             <a className="nav-link" onClick={() => handleNavClick('/update')}>
-              <span className="nav-icon">🔄</span>
+              <MdUpdate className="nav-icon" />
               {t('NUpdate')}
             </a>
             <a className="nav-link" onClick={() => handleNavClick('/forum')}>
-              <span className="nav-icon">💬</span>
+              <MdForum className="nav-icon" />
               {t('NForum')}
             </a>
             <a className="nav-link" onClick={() => handleNavClick('/posts')}>
-              <span className="nav-icon">📝</span>
-              {t('Posts')}
+              <MdArticle className="nav-icon" />
+              {t('NPosts')}
             </a>
           </div>
 
@@ -91,20 +100,20 @@ const Navbar = () => {
         <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
           <div className="mobile-menu-content">
             <a className="mobile-nav-link" onClick={() => handleNavClick('/')}>
-              <span className="nav-icon">🏠</span>
+              <MdHome className="nav-icon" />
               {t('NHome')}
             </a>
             <a className="mobile-nav-link" onClick={() => handleNavClick('/update')}>
-              <span className="nav-icon">🔄</span>
+              <MdUpdate className="nav-icon" />
               {t('NUpdate')}
             </a>
             <a className="mobile-nav-link" onClick={() => handleNavClick('/forum')}>
-              <span className="nav-icon">💬</span>
+              <MdForum className="nav-icon" />
               {t('NForum')}
             </a>
             <a className="mobile-nav-link" onClick={() => handleNavClick('/posts')}>
-              <span className="nav-icon">📝</span>
-              {t('Posts')}
+              <MdArticle className="nav-icon" />
+              {t('NPosts')}
             </a>
             <button className="logout-btn mobile-logout" onClick={Logout}>
               <MdExitToApp className="logout-icon" />
@@ -222,6 +231,12 @@ const Navbar = () => {
 
         .nav-icon {
           font-size: 1.1rem;
+          color: rgba(255, 255, 255, 0.8);
+          transition: color 0.3s;
+        }
+
+        .nav-link:hover .nav-icon {
+          color: white;
         }
 
         .logout-btn {

@@ -4,6 +4,7 @@ import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import url from '../url';
+import { MdAgriculture, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const Login = () => {
         <div className="auth-card">
           <div className="auth-brand">
             <div className="auth-brand-icon">
-              <span aria-hidden>🌾</span>
+              <MdAgriculture />
             </div>
             <h1 className="auth-title">FarmStack</h1>
             <p className="auth-subtitle">Welcome back! Please login to continue</p>
@@ -124,7 +125,7 @@ const Login = () => {
                   className="auth-password-toggle"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? "👁️" : "👁️‍🗨️"}
+                  {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
                 </button>
               </div>
             </div>
